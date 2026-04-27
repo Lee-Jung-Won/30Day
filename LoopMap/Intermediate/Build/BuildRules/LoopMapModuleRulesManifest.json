@@ -1,0 +1,8 @@
+{
+	"SourceFiles": [
+		"E:\\LoopMap\\30Day\\LoopMap\\Source\\LoopMap\\LoopMap.Build.cs",
+		"E:\\LoopMap\\30Day\\LoopMap\\Source\\LoopMap.Target.cs",
+		"E:\\LoopMap\\30Day\\LoopMap\\Source\\LoopMapEditor.Target.cs"
+	],
+	"EngineVersion": "5.5.4"
+}

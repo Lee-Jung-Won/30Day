@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "LoopMap",
+			"Path": "..\\Source\\LoopMap.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "LoopMapEditor",
+			"Path": "..\\Source\\LoopMapEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}

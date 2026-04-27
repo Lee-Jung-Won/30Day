@@ -1,5 +1,3 @@
-// Copyright Epic Games, Inc. All Rights Reserved.
-
 using UnrealBuildTool;
 
 public class LoopMap : ModuleRules
@@ -12,6 +10,7 @@ public class LoopMap : ModuleRules
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
+		PublicIncludePaths.AddRange(new string[] { "LoopMap" });
 		// Uncomment if you are using Slate UI
 		// PrivateDependencyModuleNames.AddRange(new string[] { "Slate", "SlateCore" });
 		

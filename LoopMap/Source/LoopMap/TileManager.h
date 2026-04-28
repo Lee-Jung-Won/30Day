@@ -7,6 +7,7 @@
 #include "TileManager.generated.h"
 
 class AMovingTile;
+class UCountdown;//UI
 
 UCLASS()
 class LOOPMAP_API ATileManager : public AActor
@@ -37,6 +38,11 @@ private:
 	void MoveTiles(float DeltaTime); //타일 움직이는 함수
 	void RemoveOldTiles(); //타일 없애는 함수
 
+	void StartGame();//시작 카운트 다운을 위한 게임 시작 함수
+
+	void CountdownTick();
+	void RemoveCountdown();
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AMovingTile> TileClass;
@@ -62,5 +68,19 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile", meta = (AllowPrivateAccess = "true"))
 	TArray<TObjectPtr<AMovingTile>> SpawnedTiles;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game", meta = (AllowPrivateAccess = "true"))
+	bool bIsGameStarted = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<UCountdown> CountdownClass;
+
+	UPROPERTY()
+	TObjectPtr<UCountdown> Countdown;
+
+	int32 CountdownNumber = 3;
+
+	FTimerHandle CountdownTimerHandle;
+	FTimerHandle RemoveCountdownTimerHandle;
+	FTimerHandle StartGameTimerHandle;
 	//아이템 먹고 이동속도 증가한다면 여기에 AddSpeed같은 함수 추가
 };

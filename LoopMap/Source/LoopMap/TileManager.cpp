@@ -2,8 +2,11 @@
 
 
 #include "TileManager.h"
-
 #include "MovingTile.h"
+#include "TimerManager.h"
+#include "UI/Countdown.h"
+#include "Blueprint/UserWidget.h"
+
 
 
 // Sets default values
@@ -18,19 +21,43 @@ void ATileManager::BeginPlay()
 {
 	Super::BeginPlay();
 
+	bIsGameStarted = false;//게임 시작 전
+	CountdownNumber = 3;
+
 	NextSpawnX = 0.0f;
 
 	for (int32 i = 0; i < InitialTileCount; ++i)
 	{
 		SpawnTile();
 	}
+	if (CountdownClass)
+	{
+		Countdown = CreateWidget<UCountdown>(GetWorld(), CountdownClass);
 
+		if (Countdown)
+		{
+			Countdown->AddToViewport();
+			Countdown->SetCountdownText(TEXT("3"));//3 미리 띄워놓기
+		}
+	}
+	GetWorldTimerManager().SetTimer( 
+		CountdownTimerHandle,
+		this,
+		&ATileManager::CountdownTick,
+		1.0f,
+		true
+	);
 }
 
 // Called every frame
 void ATileManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (!bIsGameStarted)//카운트 다운 세는중
+	{
+		return;
+	}
 
 	MoveTiles(DeltaTime);
 
@@ -42,6 +69,51 @@ void ATileManager::Tick(float DeltaTime)
 	}
 	RemoveOldTiles();
 
+}
+
+void ATileManager::CountdownTick()
+{
+	CountdownNumber--;
+
+	if (CountdownNumber > 0)
+	{
+		if (Countdown)
+		{
+			Countdown->SetCountdownText(FString::FromInt(CountdownNumber));
+		}
+
+		return;
+	}
+
+	GetWorldTimerManager().ClearTimer(CountdownTimerHandle);
+	
+	if (Countdown)
+	{
+		Countdown->SetCountdownText(TEXT("GO!"));
+	}
+	StartGame();
+	
+	GetWorldTimerManager().SetTimer(
+		RemoveCountdownTimerHandle,
+		this,
+		&ATileManager::RemoveCountdown,
+		0.5f,
+		false
+	);
+}
+
+void ATileManager::StartGame()
+{
+	bIsGameStarted = true;
+}
+
+void ATileManager::RemoveCountdown()
+{
+	if (Countdown)
+	{
+		Countdown->RemoveFromParent();
+		Countdown = nullptr;
+	}
 }
 void ATileManager::SpawnTile()
 {
@@ -112,5 +184,6 @@ void ATileManager::RemoveOldTiles()
 
 	}
 }
+
 
 //AddSpeed(){}

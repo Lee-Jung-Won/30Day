@@ -45,13 +45,13 @@ private:
 	int32 InitialTileCount = 6;//기본적으로 유지되는 타일 개수, 매쉬 길이봐서 더 줄여도 될듯
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile", meta = (AllowPrivateAccess = "true"))
-	float TileLength = 1000.0f;//제일 중요한 변수, 여기가 안맞으면 타일이 끊어져 보임,, 매쉬 길이와 똑같게 유지
+	float TileLength = 1284.0f;//제일 중요한 변수, 여기가 안맞으면 타일이 끊어져 보임,, 매쉬 길이와 똑같게 유지
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile", meta = (AllowPrivateAccess = "true"))
 	float MoveSpeed = 600.0f;//이동 속도
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile", meta = (AllowPrivateAccess = "true"))
-	float SpawnX = 5000.0f;//매쉬에 따라 수정해야할 부분 6번째 중 5번째 타일 시작
+	float SpawnX = 6420.0f;//매쉬에 따라 수정해야할 부분 6번째 중 5번째 타일 시작
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile", meta = (AllowPrivateAccess = "true"))
 	float DestroyX = -1500.0f;//트리거 역할, X좌표가 -1500이하로 떨어진 타일은 삭제

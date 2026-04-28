@@ -17,8 +17,8 @@ APlayerCharacter::APlayerCharacter()
 	CameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
 
 	//===========================================================================================
-	MoveSpeed = 300.f;
-	SprintMoveSpeed = 600.f;
+	MoveSpeed = 500.f;
+	SprintMoveSpeed = 800.f;
 	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 
 }

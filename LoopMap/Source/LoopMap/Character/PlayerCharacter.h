@@ -27,6 +27,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float SprintMoveSpeed;
 	//float AccSprintMoveSpeed;
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+	int32 CurrentHP;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+	int32 MaxHP;
 
 public:
 

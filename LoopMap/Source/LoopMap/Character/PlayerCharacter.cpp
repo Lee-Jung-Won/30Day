@@ -20,6 +20,9 @@ APlayerCharacter::APlayerCharacter()
 	MoveSpeed = 500.f;
 	SprintMoveSpeed = 800.f;
 	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
+	//===========================================================================================
+	MaxHP = 100;
+	CurrentHP = MaxHP;
 
 }
 

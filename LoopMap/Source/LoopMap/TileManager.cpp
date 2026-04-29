@@ -7,7 +7,7 @@
 #include "UI/Countdown.h"
 #include "Blueprint/UserWidget.h"
 
-
+#include "Game/LPSpawnVolume.h"
 
 // Sets default values
 ATileManager::ATileManager()
@@ -95,8 +95,9 @@ void ATileManager::CountdownTick()
 	{
 		Countdown->SetCountdownText(TEXT("GO!"));
 	}
+	// bIsGameStarted = true ========================
 	StartGame();
-	
+	// ==============================================
 	GetWorldTimerManager().SetTimer(
 		RemoveCountdownTimerHandle,
 		this,
@@ -139,17 +140,32 @@ void ATileManager::SpawnTile()
 		SpawnRotation,
 		SpawnParams
 	);
-	// SpawnVolume Actor Spawn =====
+	// SpawnVolumeTile Spawn ===========================
+	ALPSpawnVolume* SpawnTile = GetWorld()->SpawnActor<ALPSpawnVolume>(
+		LPSpawnVolumeClass,
+		SpawnLocation + FVector(0.f,0.f,500.f), // 다리메쉬 높이가 커서 위치보정
+		SpawnRotation + FRotator(0.f,90.f,0.f),
+		SpawnParams
+	);
+	// Spawn Item In SpawnVolumeTile ====================
+	SpawnedItems = SpawnTile->SpawnItem();
 
-
-	// =============================
-	if (NewTile == nullptr)
+	// ==================================================
+	if (NewTile == nullptr || SpawnTile == nullptr)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Failed"));
+		UE_LOG(LogTemp, Error, TEXT("NewTile, SpawnTile: Failed"));
 		return;
 	}
 
 	SpawnedTiles.Add(NewTile);
+
+	// ====================================================
+	for (const auto SpawnedItem : SpawnedItems)
+	{
+		TotalSpawnedItems.Add(SpawnedItem); //생성된 아이템 전부 넣기
+	}
+	SpawnTile->Destroy(); // SpawnTile지우기
+	// ====================================================
 
 	UE_LOG(LogTemp, Warning, TEXT("Spawn TileX: %.1f"), NextSpawnX);//스폰지점 확인용
 
@@ -168,12 +184,14 @@ void ATileManager::MoveTiles(float DeltaTime)
 		}
 		// Moveing Tile Logic ======================
 		Tile->AddActorWorldOffset(MoveOffset, false);//Sweep 끔. 처음엔 켜고 했는데 끄는게 나음
-		// Item Moveing Logic Need =================
-		
-
-
-		//==========================================
 	}
+	// Item Moveing Logic Need =================
+	for (AActor* Items : TotalSpawnedItems)
+	{
+		if (!Items) continue;
+		Items->AddActorWorldOffset(MoveOffset, false);
+	}
+	//==========================================
 }
 void ATileManager::RemoveOldTiles()
 {
@@ -193,7 +211,10 @@ void ATileManager::RemoveOldTiles()
 			SpawnedTiles.RemoveAt(i);
 		}
 		// Remove Item Need =======================
-
+		//SpawnedActors.RemoveAll([](AActor* Actor) // TArray에서 지워진요소에 대한 인덱스를 지우는 로직
+		//{
+		//		return !IsValid(Actor);
+		//});
 
 		//=========================================
 	}

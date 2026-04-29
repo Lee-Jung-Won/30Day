@@ -118,7 +118,7 @@ void AItemBase::DestroyItem()
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
 			GetWorld(),
 			NiagaraSystem,
-			SpawnLocation,
+			GetActorLocation(),
 			FRotator::ZeroRotator,
 			FVector(1.f),
 			true,

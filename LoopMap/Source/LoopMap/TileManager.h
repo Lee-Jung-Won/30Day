@@ -8,6 +8,7 @@
 
 class AMovingTile;
 class UCountdown;//UI
+class ALPSpawnVolume;
 
 UCLASS()
 class LOOPMAP_API ATileManager : public AActor
@@ -47,6 +48,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AMovingTile> TileClass;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile|Spawn", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<ALPSpawnVolume> LPSpawnVolumeClass;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile", meta = (AllowPrivateAccess = "true"))
 	int32 InitialTileCount = 6;//기본적으로 유지되는 타일 개수, 매쉬 길이봐서 더 줄여도 될듯
 
@@ -67,6 +71,12 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile", meta = (AllowPrivateAccess = "true"))
 	TArray<TObjectPtr<AMovingTile>> SpawnedTiles;
+
+	UPROPERTY()
+	TArray<AActor*> SpawnedItems;
+	UPROPERTY()
+	TArray<AActor*> TotalSpawnedItems;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game", meta = (AllowPrivateAccess = "true"))
 	bool bIsGameStarted = false;

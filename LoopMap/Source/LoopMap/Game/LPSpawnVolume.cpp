@@ -12,7 +12,7 @@ ALPSpawnVolume::ALPSpawnVolume()
 	SceneComponent = GameUtil::CreateRootComponet<USceneComponent>(this);
 	BoxComponent = GameUtil::CreateComponent<UBoxComponent>(this);
 
-	SquareSizeInVolume = FVector(50.f, 50.f, 0.f);
+	SquareSizeInVolume = FVector(100.f, 50.f, 0.f);
 
 	ItemDataTable = nullptr;
 }
@@ -58,17 +58,18 @@ TArray<UClass*> ALPSpawnVolume::GetRandomItem(int32 HowMany)
 	return NeedToSpawnItemList;
 }
 
-void ALPSpawnVolume::SpawnItem()
+TArray<AActor*> ALPSpawnVolume::SpawnItem()
 {
 	//격자좌표얻기
 	TArray<FVector> SpawnSpots = GetCalculatedPositionInVolume();
 	//격자좌표갯수만큼 랜덤아이템 얻기
 	TArray<UClass*> SpawnItemInfo = GetRandomItem(SpawnSpots.Num());
-
+	//스폰된아이템넣기
+	
 	if (SpawnItemInfo.IsEmpty())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("List is Empty"));
-		return;
+		return SpawnedItemInfo;
 	}
 
 	for (int i = 0; i < SpawnSpots.Num(); i++)
@@ -86,12 +87,13 @@ void ALPSpawnVolume::SpawnItem()
 		{// 함정위치보정
 			AdjustLoc = FVector(0.f, 0.f, 40.f);
 		}
-		GetWorld()->SpawnActor<AActor>(
+		SpawnedItemInfo.Add(GetWorld()->SpawnActor<AActor>(
 			SpawnItemInfo[i],
 			SpawnSpots[i] + AdjustLoc,
 			FRotator::ZeroRotator
-		);
+		));
 	}
+	return SpawnedItemInfo;
 }
 
 TArray<FVector> ALPSpawnVolume::GetCalculatedPositionInVolume()

@@ -4,6 +4,7 @@
 #include "GameUtilHeader/GameUtilComponent.h"
 #include "Item/CoinItem.h"
 #include "Item/PotionItem.h"
+#include "Item/BoomTrapItem.h"
 ALPSpawnVolume::ALPSpawnVolume()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -59,8 +60,9 @@ TArray<UClass*> ALPSpawnVolume::GetRandomItem(int32 HowMany)
 
 void ALPSpawnVolume::SpawnItem()
 {
+	//격자좌표얻기
 	TArray<FVector> SpawnSpots = GetCalculatedPositionInVolume();
-	// 좌표를 돌면서 안에서 랜덤아이템계산을 해야할듯...
+	//격자좌표갯수만큼 랜덤아이템 얻기
 	TArray<UClass*> SpawnItemInfo = GetRandomItem(SpawnSpots.Num());
 
 	if (SpawnItemInfo.IsEmpty())
@@ -74,11 +76,15 @@ void ALPSpawnVolume::SpawnItem()
 		FVector AdjustLoc = FVector::ZeroVector;
 		if (SpawnItemInfo[i]->IsChildOf(ACoinItem::StaticClass()))
 		{// 코인위치보정
-			AdjustLoc = FVector(0.f, 0.f, 50.f);
+			AdjustLoc = FVector(0.f, 0.f, 80.f);
 		}
 		if (SpawnItemInfo[i]->IsChildOf(APotionItem::StaticClass()))
 		{// 물약위치보정
-			AdjustLoc = FVector(0.f, 0.f, 50.f);
+			AdjustLoc = FVector(0.f, 0.f, 80.f);
+		}
+		if (SpawnItemInfo[i]->IsChildOf(ABoomTrapItem::StaticClass()))
+		{// 함정위치보정
+			AdjustLoc = FVector(0.f, 0.f, 40.f);
 		}
 		GetWorld()->SpawnActor<AActor>(
 			SpawnItemInfo[i],
@@ -182,7 +188,5 @@ TArray<FVector> ALPSpawnVolume::GetCalculatedPositionInVolume()
 void ALPSpawnVolume::BeginPlay()
 {
 	Super::BeginPlay();
-
-	SpawnItem();
 }
 

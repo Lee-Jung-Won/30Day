@@ -1,5 +1,5 @@
 #include "Item/HealPotionItem.h"
-
+#include "Character/PlayerCharacter.h"
 AHealPotionItem::AHealPotionItem()
 {
 	AddAmount = 25;
@@ -12,7 +12,10 @@ void AHealPotionItem::ActivateItem(AActor* Activator)
 	UE_LOG(LogTemp, Warning, TEXT("Activate HPpotionItem"));
 	if (Activator && Activator->ActorHasTag("Player"))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Destoryed"));
+		if (APlayerCharacter* Player = Cast<APlayerCharacter>(Activator))
+		{
+			Player->SetCurrentHP(AddAmount);
+		}
 		DestroyItem();
 	}
 }

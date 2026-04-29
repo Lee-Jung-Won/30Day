@@ -35,8 +35,8 @@ AItemBase::AItemBase()
 
 	UpDownSpeed = 2.f;
 	UpDownRange = 0.1f;
-	MoveToActorSpeed = 100.f;
-	AccMoveToActorSpeed = 20.f;
+	MoveToActorSpeed = 200.f;
+	AccMoveToActorSpeed = 50.f;
 	MaxMoveToActorSpeed = 800.f;
 	TargetOneActor = nullptr;
 	setgo = false;

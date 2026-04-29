@@ -1,5 +1,5 @@
 #include "Item/TrapItem.h"
-
+#include "Kismet/GameplayStatics.h"
 ATrapItem::ATrapItem()
 {
 	PrimaryActorTick.bCanEverTick = false;
@@ -26,8 +26,13 @@ void ATrapItem::ActivateItem(AActor* Activator)
 	UE_LOG(LogTemp, Warning, TEXT("TrapItem Activate"));
 	if (Activator && Activator->ActorHasTag("Player"))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("TakeDmg: %d"), DmgAmount);
-
+		UGameplayStatics::ApplyDamage(
+			Activator,
+			DmgAmount,
+			nullptr,
+			this,
+			UDamageType::StaticClass()
+		);
 	}
 	DestroyItem();
 }

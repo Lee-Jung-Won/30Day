@@ -5,6 +5,7 @@
 ABoomTrapItem::ABoomTrapItem()
 {
 	DmgAmount = 50;
+	BoomInterval = 2.f;
 	ItemName = TEXT("BoomTrapItem");
 }
 
@@ -23,7 +24,7 @@ void ABoomTrapItem::OnMagnetBoundOverLap(
 			ExplodeTimerHandle,
 			this,
 			&ABoomTrapItem::Explode,
-			3.0f,
+			BoomInterval,
 			false
 		);
 	}

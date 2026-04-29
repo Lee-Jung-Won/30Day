@@ -32,7 +32,19 @@ public:
 	int32 CurrentHP;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
 	int32 MaxHP;
+	UFUNCTION(BlueprintPure, Category = "State")
+	int32 GetCurrentHP() const;
+	UFUNCTION(BlueprintCallable, Category = "State")
+	void SetCurrentHP(int32 InCurrentHP);
+	UFUNCTION(BlueprintPure, Category = "State")
+	int32 GetCurrentSpeed() const;
+	UFUNCTION(BlueprintCallable, Category = "State")
+	void SetCurrentSpeed(int32 InApplySpeed);
 
+	FTimerHandle SpeedConstantTimer;
+	void MaxSpeedToNormalSpeed();
+
+	void OnDeath();
 public:
 
 	void Move_Start(const FInputActionValue& Value);
@@ -43,9 +55,24 @@ public:
 	void Sprint_Start(const FInputActionValue& Value);
 	void Sprint_Stop(const FInputActionValue& Value);
 
-protected:
-	virtual void BeginPlay() override;
+	UPROPERTY()
+	float TargetYaw;
+	UPROPERTY()
+	float TargetPitch;
+	UPROPERTY()
+	float CurrentPitch;
+	UPROPERTY()
+	float CurrentYaw;
 
+
+protected:
+	virtual float TakeDamage(
+		float Damage,
+		struct FDamageEvent const& DamageEvent,
+		AController* EventInstigator,
+		AActor* DamageCauser) override;
+
+	virtual void BeginPlay() override;
 public:	
 	virtual void Tick(float DeltaTime) override;
 

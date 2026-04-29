@@ -40,6 +40,9 @@ void ATileManager::BeginPlay()
 			Countdown->SetCountdownText(TEXT("3"));//3 미리 띄워놓기
 		}
 	}
+
+	//GameState로 넘겨서 GameState의 시간을 적용해야할 타이머 =============
+
 	GetWorldTimerManager().SetTimer( 
 		CountdownTimerHandle,
 		this,
@@ -47,6 +50,7 @@ void ATileManager::BeginPlay()
 		1.0f,
 		true
 	);
+	//=======================================
 }
 
 // Called every frame
@@ -135,7 +139,10 @@ void ATileManager::SpawnTile()
 		SpawnRotation,
 		SpawnParams
 	);
+	// SpawnVolume Actor Spawn =====
 
+
+	// =============================
 	if (NewTile == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Failed"));
@@ -159,9 +166,13 @@ void ATileManager::MoveTiles(float DeltaTime)
 		{
 			continue;
 		}
-
-
+		// Moveing Tile Logic ======================
 		Tile->AddActorWorldOffset(MoveOffset, false);//Sweep 끔. 처음엔 켜고 했는데 끄는게 나음
+		// Item Moveing Logic Need =================
+		
+
+
+		//==========================================
 	}
 }
 void ATileManager::RemoveOldTiles()
@@ -181,7 +192,10 @@ void ATileManager::RemoveOldTiles()
 			Tile->Destroy();
 			SpawnedTiles.RemoveAt(i);
 		}
+		// Remove Item Need =======================
 
+
+		//=========================================
 	}
 }
 

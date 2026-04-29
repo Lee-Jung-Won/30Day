@@ -32,7 +32,8 @@ public:
 
 	FTimerHandle ExplodeTimerHandle;
 	void Explode();
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Boom")
+	float BoomInterval;
 
 protected:
 

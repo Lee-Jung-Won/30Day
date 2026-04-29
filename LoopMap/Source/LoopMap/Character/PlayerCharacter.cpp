@@ -17,9 +17,10 @@ APlayerCharacter::APlayerCharacter()
 	CameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
 
 	//===========================================================================================
-	MoveSpeed = 500.f;
-	SprintMoveSpeed = 800.f;
+	MoveSpeed = 600.f;
+	SprintMoveSpeed = 600.f; // 없어질기능
 	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
+	GetCharacterMovement()->AirControl = 2.0f;
 	//===========================================================================================
 	MaxHP = 100;
 	CurrentHP = MaxHP;
@@ -32,12 +33,86 @@ void APlayerCharacter::BeginPlay()
 	
 }
 
+int32 APlayerCharacter::GetCurrentHP() const
+{
+	return CurrentHP;
+}
+
+void APlayerCharacter::SetCurrentHP(int32 InCurrentHP)
+{
+	CurrentHP = FMath::Clamp(CurrentHP + InCurrentHP, 0, MaxHP);
+}
+
+int32 APlayerCharacter::GetCurrentSpeed() const
+{
+	return GetCharacterMovement()->MaxWalkSpeed;
+}
+
+void APlayerCharacter::SetCurrentSpeed(int32 InApplySpeed)
+{
+	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed + InApplySpeed;
+	// TileManager.cpp > TileSpeed = MoveSpeed + InApplySpeed 변경로직
+	//
+	// ==========================================================
+	GetWorldTimerManager().SetTimer(
+		SpeedConstantTimer,
+		this,
+		&APlayerCharacter::MaxSpeedToNormalSpeed,
+		3.f,
+		false
+	);
+}
+
+void APlayerCharacter::MaxSpeedToNormalSpeed()
+{
+	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
+	// TileManager.cpp > TileSpeed = MoveSpeed 정상화 로직
+	//
+	// ==========================================================
+}
+
+void APlayerCharacter::OnDeath()
+{
+	//end logic
+}
+
+float APlayerCharacter::TakeDamage(
+	float Damage,
+	FDamageEvent const& DamageEvent,
+	AController* EventInstigator,
+	AActor* DamageCauser)
+{
+	float ActualDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+	CurrentHP = FMath::Clamp(CurrentHP - Damage, 0.f, MaxHP);
+	UE_LOG(LogTemp, Warning, TEXT("Take Damaged: CurrentHP: %d"), CurrentHP);
+	if (CurrentHP <= 0)
+	{
+		OnDeath();
+	}
+	return ActualDamage;
+}
+
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	AddMovementInput(GetActorForwardVector(), 1.0f);
 	//AccMoveSpeed = MoveSpeed * DeltaTime;
 	//AccSprintMoveSpeed = SprintMoveSpeed * DeltaTime;
+	CurrentPitch = FMath::FInterpTo(
+		CurrentPitch,
+		TargetPitch,
+		DeltaTime,
+		8.f
+	);
+
+	CurrentYaw = FMath::FInterpTo(
+		CurrentYaw,
+		TargetYaw,
+		DeltaTime,
+		8.f
+	);
+	SpringArmComponent->SetRelativeRotation(FRotator(CurrentPitch, CurrentYaw, 0.f));
+
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -109,6 +184,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	}
 }
 
+
 void APlayerCharacter::Move_Start(const FInputActionValue& Value)
 {
 	if (!Controller) return;
@@ -116,7 +192,7 @@ void APlayerCharacter::Move_Start(const FInputActionValue& Value)
 	const FVector2D Movevalue = Value.Get<FVector2D>();
 	if (!Movevalue.IsNearlyZero())
 	{
-		AddMovementInput(GetActorForwardVector(), Movevalue.X);
+		//AddMovementInput(GetActorForwardVector(), Movevalue.X);
 		AddMovementInput(GetActorRightVector(), Movevalue.Y);
 	}
 }
@@ -128,11 +204,16 @@ void APlayerCharacter::Move_Stop(const FInputActionValue& Value)
 void APlayerCharacter::Look(const FInputActionValue& Value)
 {
 	const FVector2D Lookvalue = Value.Get<FVector2D>();
-
-	if (!Lookvalue.IsNearlyZero())
+	//AddControllerYawInput(Lookvalue.X);
+	//AddControllerPitchInput(Lookvalue.Y);
+	if (!FMath::IsNearlyZero(Lookvalue.X))
 	{
-		AddControllerYawInput(Lookvalue.X);
-		AddControllerPitchInput(Lookvalue.Y);
+		TargetYaw += Lookvalue.X;
+	}
+	if (!FMath::IsNearlyZero(Lookvalue.Y))
+	{
+		TargetPitch += -Lookvalue.Y;
+		TargetPitch = FMath::Clamp(TargetPitch, -50, 20);
 	}
 }
 

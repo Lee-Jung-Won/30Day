@@ -46,7 +46,7 @@ private:
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile", meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<AMovingTile> TileClass;
+	TArray<TSubclassOf<AMovingTile>> TileClasses;//랜덤 타일 생성을 위한 타일 배열
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile|Spawn", meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<ALPSpawnVolume> LPSpawnVolumeClass;
@@ -58,19 +58,28 @@ private:
 	float TileLength = 1284.0f;//제일 중요한 변수, 여기가 안맞으면 타일이 끊어져 보임,, 매쉬 길이와 똑같게 유지
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile", meta = (AllowPrivateAccess = "true"))
-	float MoveSpeed = 800.0f;//이동 속도
+	float MoveSpeed = 700.0f;//이동 속도
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile", meta = (AllowPrivateAccess = "true"))
 	float SpawnX = 11556.0f;//매쉬에 따라 수정해야할 부분 10번째 중 9번째 타일 시작
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile", meta = (AllowPrivateAccess = "true"))
-	float DestroyX = -1500.0f;//트리거 역할, X좌표가 -1500이하로 떨어진 타일은 삭제
+	float DestroyX = -3000.0f;//트리거 역할, X좌표가 -1500이하로 떨어진 타일은 삭제
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile", meta = (AllowPrivateAccess = "true"))
 	float NextSpawnX = 0.0f;//트리거 역할, X좌표가 0이하로 떨어지면 새 타일 생성
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Tile", meta = (AllowPrivateAccess = "true"))
 	TArray<TObjectPtr<AMovingTile>> SpawnedTiles;//타일을 담는 배열
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Speed", meta = (AllowPrivateAccess = "true"))
+	float SpeedIncreasePerSecond = 50.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Speed", meta = (AllowPrivateAccess = "true"))
+	float MaxMoveSpeed = 1500.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Debug", meta = (AllowPrivateAccess = "true"))
+	float SpeedLogTimer = 0.0f;
 
 	UPROPERTY()
 	TArray<AActor*> SpawnedItems;

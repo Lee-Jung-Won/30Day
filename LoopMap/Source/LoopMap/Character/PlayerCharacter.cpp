@@ -14,7 +14,7 @@
 APlayerCharacter::APlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	NormalSpringArmLength = 800.0f;
+	NormalSpringArmLength = 600.0f;
 	SpringArmComponent = GameUtil::CreateComponent<USpringArmComponent>(this);
 	SpringArmComponent->TargetArmLength = NormalSpringArmLength;
 	SpringArmComponent->SetRelativeRotation(FRotator(-60.0f, 0.0f, 0.0f));
@@ -23,7 +23,7 @@ APlayerCharacter::APlayerCharacter()
 	CameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
 
 	//===========================================================================================
-	MoveSpeed = 800.f;
+	MoveSpeed = 700.f;
 	SprintMoveSpeed = 1000.f; // ���������
 	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 	GetCharacterMovement()->AirControl = 2.0f;

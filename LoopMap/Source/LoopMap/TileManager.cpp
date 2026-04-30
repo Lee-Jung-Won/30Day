@@ -63,16 +63,30 @@ void ATileManager::Tick(float DeltaTime)
 		return;
 	}
 
+	MoveSpeed += SpeedIncreasePerSecond * DeltaTime;
+	MoveSpeed = FMath::Clamp(MoveSpeed, 0.0f, MaxMoveSpeed);
+	
+	SpeedLogTimer += DeltaTime;
+	if (SpeedLogTimer >= 1.0f)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Current MoveSpeed: %.1f / Max: %.1f"),
+			MoveSpeed,
+			MaxMoveSpeed
+		);
+
+		SpeedLogTimer = 0.0f;
+	}
+	
 	MoveTiles(DeltaTime);
 
+	NextSpawnX -= MoveSpeed * DeltaTime;
 
-	while (NextSpawnX <= SpawnX)
+	if (NextSpawnX <= SpawnX)
 	{
 		SpawnTile();
 	}
-	RemoveOldTiles();
 
-	NextSpawnX -= MoveSpeed * DeltaTime;//타일이 -x로 움직이기때문에 다음 생성 위치도 같이 움직여야함
+	RemoveOldTiles();//타일이 -x로 움직이기때문에 다음 생성 위치도 같이 움직여야함
 }
 
 void ATileManager::SetFloorMoveSpeed(float InSpeed)
@@ -132,11 +146,7 @@ void ATileManager::SpawnTile()
 		NextSpawnX
 	);
 
-if (TileClass == nullptr)//디버깅용 출력코드
-{
-	UE_LOG(LogTemp, Error, TEXT("TileClass is nullptr."))
-		return;
-}
+
 
 const FVector SpawnLocation = FVector(NextSpawnX, 0.0f, 0.0f);
 const FRotator SpawnRotation = FRotator::ZeroRotator;
@@ -144,8 +154,17 @@ const FRotator SpawnRotation = FRotator::ZeroRotator;
 FActorSpawnParameters SpawnParams;
 SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-AMovingTile* NewTile = GetWorld()->SpawnActor<AMovingTile>(
-	TileClass,
+if (TileClasses.IsEmpty())
+{
+	UE_LOG(LogTemp, Error, TEXT("TileClasses is empty. Set tile blueprints in BP_TileManager."));
+	return;
+}
+
+const int32 RandomIndex = FMath::RandRange(0, TileClasses.Num() - 1); //랜덤 타일
+TSubclassOf<AMovingTile> SelectedTileClass = TileClasses[RandomIndex];
+
+AMovingTile* NewTile = GetWorld()->SpawnActor<AMovingTile>( //랜덤 타일 호출
+	SelectedTileClass,
 	SpawnLocation,
 	SpawnRotation,
 	SpawnParams

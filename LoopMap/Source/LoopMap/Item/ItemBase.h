@@ -28,7 +28,7 @@ public:
 	TObjectPtr<UStaticMeshComponent> StaticMeshComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<USphereComponent> SphereComponent;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<USphereComponent> MagnetSphereComponent;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	TObjectPtr<UNiagaraSystem> NiagaraSystem;

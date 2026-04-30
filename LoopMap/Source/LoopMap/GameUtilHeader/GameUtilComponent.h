@@ -5,10 +5,10 @@ namespace GameUtil
 {
 	template<typename T>
 	T* CreateComponent(
-		AActor* Owner, //ÇÊ¼ö Å¬·¡½º
-		bool isChild = true, //ÇÏÀ§ °èÃþ ÀÎÁö
-		USceneComponent* InParent = nullptr, //»óÀ§ ·¹ÆÛ·±½º
-		FName createName = NAME_None) //ÀÌ¸§
+		AActor* Owner, //ï¿½Ê¼ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½
+		bool isChild = true, //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		USceneComponent* InParent = nullptr, //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Û·ï¿½ï¿½ï¿½
+		FName createName = NAME_None) //ï¿½Ì¸ï¿½
 	{
 		static_assert(TIsDerivedFrom<T, USceneComponent>::IsDerived, "T is Not USceneComponent");
 			if (!ensureMsgf(Owner, TEXT("CreateComponent Owner Null")))
@@ -18,7 +18,7 @@ namespace GameUtil
 		FName finalName = createName;
 		if (finalName.IsNone())
 		{
-			//ÀÚµ¿À¸·Î ÀÌ¸§ »ý¼º
+			//ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½
 			finalName = MakeUniqueObjectName(Owner, T::StaticClass(),
 				T::StaticClass()->GetFName());
 		}
@@ -27,9 +27,9 @@ namespace GameUtil
 		{
 			return nullptr;
 		}
-		if (isChild) //ÇÏÀ§ °èÃþ ÀÎÁö
+		if (isChild) //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		{
-			if (InParent == nullptr) //»óÀ§ ·¹ÆÛ·±½º Ã¼Å©
+			if (InParent == nullptr) //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Û·ï¿½ï¿½ï¿½ Ã¼Å©
 			{
 				InParent = Owner->GetRootComponent();
 			}

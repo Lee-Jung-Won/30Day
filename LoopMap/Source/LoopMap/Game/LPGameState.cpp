@@ -16,7 +16,7 @@ ALPGameState::ALPGameState()
 	RunningLengthScore = 0;
 	PlayerCollectCoinCount = 0;
 
-	GameStateMaxTime = 15.f;
+	GameStateMaxTime = 60.f;
 }
 
 //int32 ALPGameState::GetStateScore() const

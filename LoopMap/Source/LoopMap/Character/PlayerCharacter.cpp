@@ -128,16 +128,12 @@ void APlayerCharacter::ZoomOutLogic(float DeltaTime)
 void APlayerCharacter::MaxSpeedToNormalSpeed()
 {
 	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
-<<<<<<< HEAD
+
 	// TileManager.cpp > TileSpeed = MoveSpeed ����ȭ ����
 	ATileManager* TileManager = Cast<ATileManager>(
 		UGameplayStatics::GetActorOfClass(GetWorld(), ATileManager::StaticClass()));
 	if (!TileManager) return;
 	TileManager->SetFloorMoveSpeed(MoveSpeed);
-=======
-	// TileManager.cpp > TileSpeed = MoveSpeed ����ȭ ����
-	//
->>>>>>> EditCode
 	// ==========================================================
 	bIsZoomOutLogic = false;
 	bIsZoomInLogic = false;
@@ -167,15 +163,8 @@ float APlayerCharacter::TakeDamage(
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-<<<<<<< HEAD
-	// CharacterMoveLogic =============================================================
-	AddMovementInput(GetActorForwardVector(), 1.0f);
-	//AccMoveSpeed = MoveSpeed * DeltaTime;
-	//AccSprintMoveSpeed = SprintMoveSpeed * DeltaTime;
-	// ================================================================================
-	
-	// SpringSoftMoveLogic ============================================================
-=======
+
+
 	//AddMovementInput(GetActorForwardVector(), 1.0f);
 	//AccMoveSpeed = MoveSpeed * DeltaTime;
 	//AccSprintMoveSpeed = SprintMoveSpeed * DeltaTime;
@@ -184,7 +173,6 @@ void APlayerCharacter::Tick(float DeltaTime)
 	CurrentLocation.X = FixedX;
 	SetActorLocation(CurrentLocation);
 
->>>>>>> EditCode
 	CurrentPitch = FMath::FInterpTo(
 		CurrentPitch,
 		TargetPitch,

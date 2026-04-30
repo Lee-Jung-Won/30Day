@@ -18,7 +18,7 @@ APlayerCharacter::APlayerCharacter()
 
 	//===========================================================================================
 	MoveSpeed = 600.f;
-	SprintMoveSpeed = 600.f; // ¾ø¾îÁú±â´É
+	SprintMoveSpeed = 600.f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 	GetCharacterMovement()->AirControl = 2.0f;
 	//===========================================================================================
@@ -30,7 +30,7 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	FixedX = GetActorLocation().X;
 }
 
 int32 APlayerCharacter::GetCurrentHP() const
@@ -51,7 +51,7 @@ int32 APlayerCharacter::GetCurrentSpeed() const
 void APlayerCharacter::SetCurrentSpeed(int32 InApplySpeed)
 {
 	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed + InApplySpeed;
-	// TileManager.cpp > TileSpeed = MoveSpeed + InApplySpeed º¯°æ·ÎÁ÷
+	// TileManager.cpp > TileSpeed = MoveSpeed + InApplySpeed ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	//
 	// ==========================================================
 	GetWorldTimerManager().SetTimer(
@@ -66,7 +66,7 @@ void APlayerCharacter::SetCurrentSpeed(int32 InApplySpeed)
 void APlayerCharacter::MaxSpeedToNormalSpeed()
 {
 	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
-	// TileManager.cpp > TileSpeed = MoveSpeed Á¤»óÈ­ ·ÎÁ÷
+	// TileManager.cpp > TileSpeed = MoveSpeed ï¿½ï¿½ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½
 	//
 	// ==========================================================
 }
@@ -95,9 +95,14 @@ float APlayerCharacter::TakeDamage(
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	AddMovementInput(GetActorForwardVector(), 1.0f);
+	//AddMovementInput(GetActorForwardVector(), 1.0f);
 	//AccMoveSpeed = MoveSpeed * DeltaTime;
 	//AccSprintMoveSpeed = SprintMoveSpeed * DeltaTime;
+
+	FVector CurrentLocation = GetActorLocation();
+	CurrentLocation.X = FixedX;
+	SetActorLocation(CurrentLocation);
+
 	CurrentPitch = FMath::FInterpTo(
 		CurrentPitch,
 		TargetPitch,

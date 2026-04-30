@@ -24,11 +24,19 @@ AItemBase::AItemBase()
 
 	//NiagaraComponent = GameUtil::CreateComponent<UNiagaraSystem>(this);
 	//NiagaraComponent->SetAutoActivate(false);
-	//overlapÀÇ ÆÄ¶ó¹ÌÅÍ¿Í µ¿ÀÏÇØ¾ß ¹ÙÀÎµù ¼º°øÇÔ
+	//overlapï¿½ï¿½ ï¿½Ä¶ï¿½ï¿½ï¿½Í¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ï¿½ ï¿½ï¿½ï¿½Îµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AItemBase::OnItemOverLap);
 	SphereComponent->OnComponentEndOverlap.AddDynamic(this, &AItemBase::OnItemEndOverLap);
+	SphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	SphereComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
+	SphereComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	SphereComponent->SetGenerateOverlapEvents(true);
 
 	MagnetSphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AItemBase::OnMagnetBoundOverLap);
+	MagnetSphereComponent->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	MagnetSphereComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
+	MagnetSphereComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	MagnetSphereComponent->SetGenerateOverlapEvents(true);
 	//===========================================================================================
 
 	ItemName = TEXT("ItemBase");
@@ -50,7 +58,7 @@ void AItemBase::OnItemOverLap(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-	//player¹Û¿¡ ¾øÀ½ >> ÀÚ¼®ÀÌµ¿¶§¹®¿¡ ´Ù¸¥¿¢ÅÍµµ ÀÖÀ½
+	//playerï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ >> ï¿½Ú¼ï¿½ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ï¿½ï¿½ï¿½Íµï¿½ ï¿½ï¿½ï¿½ï¿½
 	if (OtherActor && OtherActor->ActorHasTag("Player"))
 	{
 		ActivateItem(OtherActor);
@@ -75,7 +83,7 @@ void AItemBase::OnMagnetBoundOverLap(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-	//ÀÚ¼®(PlayerÅÂ±× ÀÏ¶§¸¸)
+	//ï¿½Ú¼ï¿½(Playerï¿½Â±ï¿½ ï¿½Ï¶ï¿½ï¿½ï¿½)
 	if (OtherActor && OtherActor->ActorHasTag("Player"))
 	{
 		TargetOneActor = OtherActor;

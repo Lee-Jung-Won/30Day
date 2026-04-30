@@ -23,20 +23,20 @@ void ALPGameState::AddStateScore(int32 Amount)
 
 void ALPGameState::StartLevel()
 {
-	// ÇÊ¿äÇÏ¸é 3ÃÊÅ¸ÀÌ¸Ó ½á¼­ true
+	// ï¿½Ê¿ï¿½ï¿½Ï¸ï¿½ 3ï¿½ï¿½Å¸ï¿½Ì¸ï¿½ ï¿½á¼­ true
 	// tilemanager bIsGameStarted = true
 }
 
 void ALPGameState::BeginPlay()
 {
 	Super::BeginPlay();
-	// instanceÀúÀåµÈ Á¤º¸ ºÒ·¯¿À±â
+	// instanceï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½
 	ULPGameInstance* GameInstance = Cast<ULPGameInstance>(GetGameInstance());
 	if (GameInstance)
 	{
 		CurrentLevelIndex = GameInstance->GetCurrentLeve1();
 	}
-	// °ÔÀÓ½ÃÀÛ
+	// ï¿½ï¿½ï¿½Ó½ï¿½ï¿½ï¿½
 	StartLevel();
 }
 

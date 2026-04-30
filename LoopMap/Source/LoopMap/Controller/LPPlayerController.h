@@ -40,9 +40,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "HUD")
 	void ShowGameHUD();
 	UFUNCTION(BlueprintCallable, Category = "HUD")
-	void ShowMainMenu(bool bIsRestart);
+	void ShowMainMenu(bool bIsRestart, int32 IsVictory = 0);
 	UFUNCTION(BlueprintCallable, Category = "HUD")
 	void CStartGame();
+	UFUNCTION(BlueprintCallable, Category = "HUD")
+	void CExitGame();
 
 	UFUNCTION(BlueprintPure, Category = "HUD")
 	UUserWidget* GetHUDWidget() const;

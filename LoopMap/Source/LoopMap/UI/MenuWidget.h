@@ -6,6 +6,7 @@
 
 class UTextBlock;
 class UProgressBar;
+class UImage;
 
 UCLASS()
 class LOOPMAP_API UMenuWidget : public UUserWidget
@@ -16,4 +17,9 @@ public:
 	TObjectPtr<UTextBlock> StartButtonText;
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> ExitButtonText;
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> TitleTextBox;
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UImage> TitleImage;
+
 };

@@ -3,7 +3,12 @@
 #include "Game/LPGameState.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/TextBlock.h"
+#include "Components/Image.h"
+#include "Engine/Texture2D.h"
+
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
+
 #include "Game/LPGameInstance.h"
 ALPPlayerController::ALPPlayerController()
 	:Move_Action(nullptr)
@@ -87,7 +92,7 @@ void ALPPlayerController::ShowGameHUD()
 	}
 }
 
-void ALPPlayerController::ShowMainMenu(bool bIsRestart)
+void ALPPlayerController::ShowMainMenu(bool bIsRestart, int32 IsVictory)
 {
 	// bIsRestart에 따라 어떤 버튼글자로 바꿀지 정함
 	// 일단 위젯을 다 꺼
@@ -112,10 +117,61 @@ void ALPPlayerController::ShowMainMenu(bool bIsRestart)
 			SetInputMode(FInputModeUIOnly());
 		}
 
-		if (UTextBlock* ButtonText = Cast<UTextBlock>(MenuWidgetInstance->GetWidgetFromName(TEXT("StartButton"))))
+		if (UTextBlock* ButtonText = Cast<UTextBlock>(MenuWidgetInstance->GetWidgetFromName(TEXT("StartButtonText"))))
 		{// Menu button text 바꾸기 restart/start
 			if (bIsRestart)
 			{
+				if (UImage* GetImageBox = Cast<UImage>(MenuWidgetInstance->GetWidgetFromName(TEXT("TitleImage"))))
+				{
+					if (IsVictory == 1)
+					{
+						UTexture2D* NewTexture = LoadObject<UTexture2D>(
+							nullptr,
+							TEXT("/Game/30Days/Blueprint/UI/Gemini_Generated_Image_s9sthzs9sthzs9st.Gemini_Generated_Image_s9sthzs9sthzs9st")
+						);
+						if (NewTexture)
+						{
+							GetImageBox->SetBrushFromTexture(NewTexture);
+						}
+
+						if (UTextBlock* TitleText = Cast<UTextBlock>(MenuWidgetInstance->GetWidgetFromName(TEXT("TitleTextBox"))))
+						{
+							TitleText->SetText(FText::FromString(FString::Printf(TEXT("!!! Victory !!!"))));
+						}
+					}
+					else if (IsVictory == 0)
+					{
+						//UTexture2D* NewTexture = LoadObject<UTexture2D>(
+						//	nullptr,
+						//	TEXT("/Game/30Days/Blueprint/UI/Gemini_Generated_Image_113d2b113d2b113d.Gemini_Generated_Image_113d2b113d2b113d")
+						//);
+						//if (NewTexture)
+						//{
+						//	GetImageBox->SetBrushFromTexture(NewTexture);
+						//}
+
+						//if (UTextBlock* TitleText = Cast<UTextBlock>(MenuWidgetInstance->GetWidgetFromName(TEXT("TitleTextBox"))))
+						//{
+						//	TitleText->SetText(FText::FromString(FString::Printf("Running Puppy")));
+						//}
+					}
+					else if (IsVictory == -1)
+					{
+						UTexture2D* NewTexture = LoadObject<UTexture2D>(
+							nullptr,
+							TEXT("/Game/30Days/Blueprint/UI/Gemini_Generated_Image_xg53nsxg53nsxg53.Gemini_Generated_Image_xg53nsxg53nsxg53")
+						);
+						if (NewTexture)
+						{
+							GetImageBox->SetBrushFromTexture(NewTexture);
+						}
+
+						if (UTextBlock* TitleText = Cast<UTextBlock>(MenuWidgetInstance->GetWidgetFromName(TEXT("TitleTextBox"))))
+						{
+							TitleText->SetText(FText::FromString(FString::Printf(TEXT("... Defeated ..."))));
+						}
+					}
+				}
 				ButtonText->SetText(FText::FromString("Restart"));
 			}
 			else
@@ -138,6 +194,11 @@ void ALPPlayerController::CStartGame()
 
 	UGameplayStatics::OpenLevel(GetWorld(), FName("PlayGround"));
 
+}
+
+void ALPPlayerController::CExitGame()
+{
+	UKismetSystemLibrary::QuitGame(this, nullptr, EQuitPreference::Quit, false);
 }
 
 UUserWidget* ALPPlayerController::GetHUDWidget() const

@@ -25,6 +25,8 @@ public:
 
 	FTimerHandle UpdateHUDTimer;
 
+	FTimerHandle ThreeSecondsTimer;
+
 	UPROPERTY()
 	int32 StateScore;
 	UPROPERTY()

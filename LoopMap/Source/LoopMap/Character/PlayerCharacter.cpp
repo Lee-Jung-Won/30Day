@@ -142,6 +142,16 @@ void APlayerCharacter::MaxSpeedToNormalSpeed()
 void APlayerCharacter::OnDeath()
 {
 	//end logic
+	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
+	{
+		if (ALPPlayerController* LPPlayerController = Cast<ALPPlayerController>(PC))
+		{
+
+			LPPlayerController->SetPause(true);
+			LPPlayerController->ShowMainMenu(true, -1);
+
+		}
+	}
 }
 
 float APlayerCharacter::TakeDamage(

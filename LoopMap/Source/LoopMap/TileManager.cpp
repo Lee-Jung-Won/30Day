@@ -132,57 +132,57 @@ void ATileManager::SpawnTile()
 		NextSpawnX
 	);
 
-	if (TileClass == nullptr)//디버깅용 출력코드
-	{
-		UE_LOG(LogTemp, Error, TEXT("TileClass is nullptr."))
-			return;
-	}
-
-	const FVector SpawnLocation = FVector(NextSpawnX, 0.0f, 0.0f);
-	const FRotator SpawnRotation = FRotator::ZeroRotator;
-
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-	AMovingTile* NewTile = GetWorld()->SpawnActor<AMovingTile>(
-		TileClass,
-		SpawnLocation,
-		SpawnRotation,
-		SpawnParams
-	);
-	// SpawnVolumeTile Spawn ===========================
-	ALPSpawnVolume* SpawnTile = GetWorld()->SpawnActor<ALPSpawnVolume>(
-		LPSpawnVolumeClass,
-		SpawnLocation + FVector(0.f,0.f,500.f), // 다리메쉬 높이이슈 위치보정
-		SpawnRotation + FRotator(0.f,90.f,0.f), // 다리메쉬 회전값 적용
-		SpawnParams
-	);
-
-	// ==================================================
-	if (NewTile == nullptr || SpawnTile == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("NewTile, SpawnTile: Failed"));
+if (TileClass == nullptr)//디버깅용 출력코드
+{
+	UE_LOG(LogTemp, Error, TEXT("TileClass is nullptr."))
 		return;
-	}
-	// Spawn Item In SpawnVolumeTile ====================
-	SpawnedItems = SpawnTile->SpawnItem();
-	/*UE_LOG(LogTemp, Warning, TEXT("[%s] SpawnVolume spawned %d items"),
-		*GetName(),
-		SpawnedItems.Num()
-	);*/
-	SpawnedTiles.Add(NewTile);
+}
 
-	// ====================================================
-	for (const auto SpawnedItem : SpawnedItems)
-	{
-		TotalSpawnedItems.Add(SpawnedItem); //생성된 아이템 전부 넣기
-	}
-	SpawnTile->Destroy(); // SpawnTile지우기
-	// ====================================================
+const FVector SpawnLocation = FVector(NextSpawnX, 0.0f, 0.0f);
+const FRotator SpawnRotation = FRotator::ZeroRotator;
 
-	UE_LOG(LogTemp, Warning, TEXT("Spawn TileX: %.1f"), NextSpawnX);//스폰지점 확인용
+FActorSpawnParameters SpawnParams;
+SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-	NextSpawnX += TileLength;
+AMovingTile* NewTile = GetWorld()->SpawnActor<AMovingTile>(
+	TileClass,
+	SpawnLocation,
+	SpawnRotation,
+	SpawnParams
+);
+// SpawnVolumeTile Spawn ===========================
+ALPSpawnVolume* SpawnTile = GetWorld()->SpawnActor<ALPSpawnVolume>(
+	LPSpawnVolumeClass,
+	SpawnLocation + FVector(0.f, 0.f, 500.f), // 다리메쉬 높이이슈 위치보정
+	SpawnRotation + FRotator(0.f, 90.f, 0.f), // 다리메쉬 회전값 적용
+	SpawnParams
+);
+
+// ==================================================
+if (NewTile == nullptr || SpawnTile == nullptr)
+{
+	UE_LOG(LogTemp, Error, TEXT("NewTile, SpawnTile: Failed"));
+	return;
+}
+// Spawn Item In SpawnVolumeTile ====================
+SpawnedItems = SpawnTile->SpawnItem();
+/*UE_LOG(LogTemp, Warning, TEXT("[%s] SpawnVolume spawned %d items"),
+	*GetName(),
+	SpawnedItems.Num()
+);*/
+SpawnedTiles.Add(NewTile);
+
+// ====================================================
+for (const auto SpawnedItem : SpawnedItems)
+{
+	TotalSpawnedItems.Add(SpawnedItem); //생성된 아이템 전부 넣기
+}
+SpawnTile->Destroy(); // SpawnTile지우기
+// ====================================================
+
+UE_LOG(LogTemp, Warning, TEXT("Spawn TileX: %.1f"), NextSpawnX);//스폰지점 확인용
+
+NextSpawnX += TileLength;
 }
 
 void ATileManager::MoveTiles(float DeltaTime)
@@ -224,11 +224,18 @@ void ATileManager::RemoveOldTiles()
 			SpawnedTiles.RemoveAt(i);
 		}
 		// Remove Item Need =======================
-		//SpawnedActors.RemoveAll([](AActor* Actor) // TArray에서 지워진요소에 대한 인덱스를 지우는 로직
-		//{
-		//		return !IsValid(Actor);
-		//});
-
+		for (AActor* Items : TotalSpawnedItems)
+		{
+			if (Items->GetActorLocation().X < DestroyX)
+			{
+				if (!Items)	continue;
+				Items->Destroy();
+			}
+		}
+		TotalSpawnedItems.RemoveAll([](AActor* Actor) // TArray에서 지워진요소에 대한 인덱스를 지우는 로직
+			{
+				return !IsValid(Actor);
+			});
 		//=========================================
 	}
 }

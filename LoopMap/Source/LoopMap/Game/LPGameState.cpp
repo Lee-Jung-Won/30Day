@@ -5,6 +5,7 @@
 #include "Blueprint/UserWidget.h"
 #include "UI/InGameWidget.h"
 #include "Components/TextBlock.h"
+
 ALPGameState::ALPGameState()
 {
 	CurrentLevelIndex = 1;
@@ -15,7 +16,7 @@ ALPGameState::ALPGameState()
 	RunningLengthScore = 0;
 	PlayerCollectCoinCount = 0;
 
-	GameStateMaxTime = 60.f;
+	GameStateMaxTime = 15.f;
 }
 
 //int32 ALPGameState::GetStateScore() const
@@ -73,8 +74,10 @@ void ALPGameState::EndLevel()
 	{
 		if (ALPPlayerController* LPPlayerController = Cast<ALPPlayerController>(PC))
 		{
-			
-			LPPlayerController->ShowMainMenu(true);
+
+			LPPlayerController->SetPause(true);
+			LPPlayerController->ShowMainMenu(true, 1);
+
 		}
 	}
 }
@@ -83,8 +86,18 @@ void ALPGameState::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ���ӽ���
-	StartLevel();
+	FString MapName = GetWorld()->GetName();
+	if (!MapName.Contains(TEXT("MenuLevel")))
+	{
+		GetWorldTimerManager().SetTimer(
+			ThreeSecondsTimer,
+			this,
+			&ALPGameState::StartLevel,
+			3.f,
+			false
+		);
+	}
+	//StartLevel();
 }
 
 void ALPGameState::EndPlay(const EEndPlayReason::Type EndPlayReason)

@@ -14,16 +14,17 @@
 APlayerCharacter::APlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	NormalSpringArmLength = 350.0f;
+	NormalSpringArmLength = 800.0f;
 	SpringArmComponent = GameUtil::CreateComponent<USpringArmComponent>(this);
 	SpringArmComponent->TargetArmLength = NormalSpringArmLength;
+	SpringArmComponent->SetRelativeRotation(FRotator(-60.0f, 0.0f, 0.0f));
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	CameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
 
 	//===========================================================================================
-	MoveSpeed = 600.f;
-	SprintMoveSpeed = 600.f; // ���������
+	MoveSpeed = 800.f;
+	SprintMoveSpeed = 1000.f; // ���������
 	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 	GetCharacterMovement()->AirControl = 2.0f;
 	//===========================================================================================
@@ -120,6 +121,7 @@ void APlayerCharacter::ZoomOutLogic(float DeltaTime)
 
 		if (FMath::IsNearlyEqual(CurrnetSpringArmLength, TargetSpringArmLength, 1.f))
 		{
+			bIsZoomInLogic = false;
 			SpringArmComponent->TargetArmLength = NormalSpringArmLength;
 		}
 	}
@@ -186,7 +188,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 		DeltaTime,
 		8.f
 	);
-	SpringArmComponent->SetRelativeRotation(FRotator(CurrentPitch, CurrentYaw, 0.f));
+	//SpringArmComponent->SetRelativeRotation(FRotator(CurrentPitch, CurrentYaw, 0.f));
 	// ================================================================================
 
 	// SpringArmSoftLogic :: WithSpeedItem ============================================
@@ -309,10 +311,26 @@ void APlayerCharacter::Jump_Stop(const FInputActionValue& Value)
 
 void APlayerCharacter::Sprint_Start(const FInputActionValue& Value)
 {
-	GetCharacterMovement()->MaxWalkSpeed = SprintMoveSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = SprintMoveSpeed;//좌우
+
+	ATileManager* TileManager = Cast<ATileManager>(
+		UGameplayStatics::GetActorOfClass(GetWorld(), ATileManager::StaticClass()));
+
+	if (TileManager)
+	{
+		TileManager->SetFloorMoveSpeed(SprintMoveSpeed); //타일 진행 속도
+	}
 }
 
 void APlayerCharacter::Sprint_Stop(const FInputActionValue& Value)
 {
-	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;//좌우
+
+	ATileManager* TileManager = Cast<ATileManager>(
+		UGameplayStatics::GetActorOfClass(GetWorld(), ATileManager::StaticClass()));
+
+	if (TileManager)
+	{
+		TileManager->SetFloorMoveSpeed(MoveSpeed);//타일 진행 속도
+	}
 }

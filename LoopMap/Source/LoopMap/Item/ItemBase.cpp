@@ -20,7 +20,7 @@ AItemBase::AItemBase()
 	SphereComponent = GameUtil::CreateComponent<USphereComponent>(this);
 	//overlapFname = alldynamic
 	MagnetSphereComponent = GameUtil::CreateComponent<USphereComponent>(this);
-	MagnetSphereComponent->SetSphereRadius(180.f);
+	MagnetSphereComponent->SetSphereRadius(90.f);
 
 	//NiagaraComponent = GameUtil::CreateComponent<UNiagaraSystem>(this);
 	//NiagaraComponent->SetAutoActivate(false);

@@ -127,6 +127,11 @@ void ATileManager::RemoveCountdown()
 }
 void ATileManager::SpawnTile()
 {
+	UE_LOG(LogTemp, Warning, TEXT("[%s] SpawnTile Called. NextSpawnX: %.1f"),
+		*GetName(),
+		NextSpawnX
+	);
+
 	if (TileClass == nullptr)//디버깅용 출력코드
 	{
 		UE_LOG(LogTemp, Error, TEXT("TileClass is nullptr."))
@@ -152,8 +157,6 @@ void ATileManager::SpawnTile()
 		SpawnRotation + FRotator(0.f,90.f,0.f), // 다리메쉬 회전값 적용
 		SpawnParams
 	);
-	// Spawn Item In SpawnVolumeTile ====================
-	SpawnedItems = SpawnTile->SpawnItem();
 
 	// ==================================================
 	if (NewTile == nullptr || SpawnTile == nullptr)
@@ -161,7 +164,12 @@ void ATileManager::SpawnTile()
 		UE_LOG(LogTemp, Error, TEXT("NewTile, SpawnTile: Failed"));
 		return;
 	}
-
+	// Spawn Item In SpawnVolumeTile ====================
+	SpawnedItems = SpawnTile->SpawnItem();
+	/*UE_LOG(LogTemp, Warning, TEXT("[%s] SpawnVolume spawned %d items"),
+		*GetName(),
+		SpawnedItems.Num()
+	);*/
 	SpawnedTiles.Add(NewTile);
 
 	// ====================================================

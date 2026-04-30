@@ -60,12 +60,14 @@ TArray<UClass*> ALPSpawnVolume::GetRandomItem(int32 HowMany)
 
 TArray<AActor*> ALPSpawnVolume::SpawnItem()
 {
-	//°ÝÀÚÁÂÇ¥¾ò±â
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¥ï¿½ï¿½ï¿½
 	TArray<FVector> SpawnSpots = GetCalculatedPositionInVolume();
-	//°ÝÀÚÁÂÇ¥°¹¼ö¸¸Å­ ·£´ý¾ÆÀÌÅÛ ¾ò±â
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¥ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 	TArray<UClass*> SpawnItemInfo = GetRandomItem(SpawnSpots.Num());
-	//½ºÆùµÈ¾ÆÀÌÅÛ³Ö±â
+
+	//ï¿½ï¿½ï¿½ï¿½ï¿½È¾ï¿½ï¿½ï¿½ï¿½Û³Ö±ï¿½
 	//TArray<AActor*> SpawnedItemInfo;
+
 	if (SpawnItemInfo.IsEmpty())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("List is Empty"));
@@ -76,15 +78,15 @@ TArray<AActor*> ALPSpawnVolume::SpawnItem()
 	{
 		FVector AdjustLoc = FVector::ZeroVector;
 		if (SpawnItemInfo[i]->IsChildOf(ACoinItem::StaticClass()))
-		{// ÄÚÀÎÀ§Ä¡º¸Á¤
+		{// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½
 			AdjustLoc = FVector(0.f, 0.f, 80.f);
 		}
 		if (SpawnItemInfo[i]->IsChildOf(APotionItem::StaticClass()))
-		{// ¹°¾àÀ§Ä¡º¸Á¤
+		{// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½
 			AdjustLoc = FVector(0.f, 0.f, 80.f);
 		}
 		if (SpawnItemInfo[i]->IsChildOf(ABoomTrapItem::StaticClass()))
-		{// ÇÔÁ¤À§Ä¡º¸Á¤
+		{// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½
 			AdjustLoc = FVector(0.f, 0.f, 40.f);
 		}
 		SpawnedItemInfo.Add(GetWorld()->SpawnActor<AActor>(
@@ -98,8 +100,8 @@ TArray<AActor*> ALPSpawnVolume::SpawnItem()
 
 TArray<FVector> ALPSpawnVolume::GetCalculatedPositionInVolume()
 {
-	// volumeÀÇ x,y Å©±â ºñ±³ÇØ¼­ µé¾î°¥Å©±â¸¦ È®º¸ÇÏ°í
-	// È®º¸ÇßÀ¸¸é ±× »ç°¢ÇüÀÇ ÁßÁ¡ÁÂÇ¥¸¦ TArray¿¡ ´ã´Â´Ù
+	// volumeï¿½ï¿½ x,y Å©ï¿½ï¿½ ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½î°¥Å©ï¿½â¸¦ È®ï¿½ï¿½ï¿½Ï°ï¿½
+	// È®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ç°¢ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¥ï¿½ï¿½ TArrayï¿½ï¿½ ï¿½ï¿½Â´ï¿½
 	// return array;
 	//TArray<FVector> PointList;
 
@@ -136,13 +138,13 @@ TArray<FVector> ALPSpawnVolume::GetCalculatedPositionInVolume()
 	//}
 	TArray<FVector> PointList;
 
-	// TODO: BoxComponent nullptr °Ë»ç
+	// TODO: BoxComponent nullptr ï¿½Ë»ï¿½
 	FVector BoxExtent = BoxComponent->GetScaledBoxExtent();
 	FTransform BoxTransform = BoxComponent->GetComponentTransform();
 
 	if (BoxExtent.X >= SquareSizeInVolume.X && BoxExtent.Y >= SquareSizeInVolume.Y)
 	{
-		// TODO: °³¼ö °è»ê½Ä Á¡°Ë
+		// TODO: ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		int32 PointX = FMath::TruncToInt((BoxExtent.X) / SquareSizeInVolume.X);
 		int32 PointY = FMath::TruncToInt((BoxExtent.Y) / SquareSizeInVolume.Y);
 		int32 CountPoint = PointX * PointY;
@@ -150,11 +152,11 @@ TArray<FVector> ALPSpawnVolume::GetCalculatedPositionInVolume()
 		if (CountPoint == 0)
 			return PointList;
 
-		// ±âÁ¸ ¿ùµå ½ÃÀÛÁ¡ Á¦°Å
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		 FVector BoxStartPoint = GetActorLocation();
 
-		// TODO: ·ÎÄÃ ½ÃÀÛÁ¡ Á¤ÀÇ
-		// Ã¹ Ä­ÀÇ Áß½ÉÁ¡ÀÌ µÇµµ·Ï ¹Ý Ä­¸¸Å­ ¾ÈÂÊ¿¡¼­ ½ÃÀÛ
+		// TODO: ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+		// Ã¹ Ä­ï¿½ï¿½ ï¿½ß½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Çµï¿½ï¿½ï¿½ ï¿½ï¿½ Ä­ï¿½ï¿½Å­ ï¿½ï¿½ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		FVector LocalStartPoint;
 		LocalStartPoint.X = -BoxExtent.X + SquareSizeInVolume.X;
 		LocalStartPoint.Y = -BoxExtent.Y + SquareSizeInVolume.Y;
@@ -164,25 +166,40 @@ TArray<FVector> ALPSpawnVolume::GetCalculatedPositionInVolume()
 
 		for (int32 i = 0; i < PointX; i++)
 		{
-			// TODO: ÇöÀç ¿­ÀÇ ·ÎÄÃ X ÁÂÇ¥ °è»ê
+			// TODO: ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ X ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½
 			 MoveX = LocalStartPoint.X + i * (SquareSizeInVolume.X * 2);
 
 			for (int32 j = 0; j < PointY; j++)
 			{
-				// TODO: ÇöÀç ÇàÀÇ ·ÎÄÃ Y ÁÂÇ¥ °è»ê
+				// TODO: ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Y ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½
 				 MoveY = LocalStartPoint.Y + j * (SquareSizeInVolume.Y * 2);
 
-				// TODO: ·ÎÄÃ ÁÂÇ¥ »ý¼º
+				// TODO: ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½
 				FVector LocalPoint;
 				 LocalPoint = FVector(MoveX, MoveY, 0.f);
 
-				// TODO: ¿ùµå ÁÂÇ¥·Î º¯È¯
+				// TODO: ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½È¯
 				FVector WorldPoint;
 				 WorldPoint = BoxTransform.TransformPosition(LocalPoint);
 
 				PointList.Add(WorldPoint);
 			}
 		}
+		/*UE_LOG(LogTemp, Warning, TEXT("BoxExtent X: %.1f Y: %.1f"),
+			BoxExtent.X,
+			BoxExtent.Y
+		);
+
+		UE_LOG(LogTemp, Warning, TEXT("SquareSize X: %.1f Y: %.1f"),
+			SquareSizeInVolume.X,
+			SquareSizeInVolume.Y
+		);
+
+		UE_LOG(LogTemp, Warning, TEXT("PointX: %d PointY: %d Count: %d"),
+			PointX,
+			PointY,
+			CountPoint
+		);*/
 	}
 	return PointList;
 }

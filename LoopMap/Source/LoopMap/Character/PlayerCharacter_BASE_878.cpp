@@ -5,41 +5,32 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "Controller/LPPlayerController.h"
-#include "Game/LPGameState.h"
 #include "EnhancedInputComponent.h"
-
-#include "TileManager.h"
-#include "Kismet/GameplayStatics.h"
-
 APlayerCharacter::APlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
-	NormalSpringArmLength = 350.0f;
+
 	SpringArmComponent = GameUtil::CreateComponent<USpringArmComponent>(this);
-	SpringArmComponent->TargetArmLength = NormalSpringArmLength;
+	SpringArmComponent->TargetArmLength = 300.f;
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	CameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
 
 	//===========================================================================================
 	MoveSpeed = 600.f;
-	SprintMoveSpeed = 600.f; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	SprintMoveSpeed = 600.f; // ¾ø¾îÁú±â´É
 	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 	GetCharacterMovement()->AirControl = 2.0f;
 	//===========================================================================================
 	MaxHP = 100;
 	CurrentHP = MaxHP;
 
-	bIsZoomOutLogic = false;
-	bIsZoomInLogic = false;
 }
 
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	FixedX = GetActorLocation().X;
-
+	
 }
 
 int32 APlayerCharacter::GetCurrentHP() const
@@ -60,87 +51,24 @@ int32 APlayerCharacter::GetCurrentSpeed() const
 void APlayerCharacter::SetCurrentSpeed(int32 InApplySpeed)
 {
 	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed + InApplySpeed;
-	// TileManager.cpp > TileSpeed = MoveSpeed + InApplySpeed ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-	ATileManager* TileManager = Cast<ATileManager>(
-		UGameplayStatics::GetActorOfClass(GetWorld(), ATileManager::StaticClass()));
-	if (!TileManager) return;
-	TileManager->SetFloorMoveSpeed(MoveSpeed + InApplySpeed);
-
-
+	// TileManager.cpp > TileSpeed = MoveSpeed + InApplySpeed º¯°æ·ÎÁ÷
 	//
-
 	// ==========================================================
-
-	// =================================== camera zoom out
-	bIsZoomOutLogic = true;
-	// ===================================
 	GetWorldTimerManager().SetTimer(
 		SpeedConstantTimer,
 		this,
 		&APlayerCharacter::MaxSpeedToNormalSpeed,
-		1.5f,
+		3.f,
 		false
 	);
-}
-
-void APlayerCharacter::ZoomOutLogic(float DeltaTime)
-{// ZoomOutLogic in Tick()
-	if (bIsZoomOutLogic)
-	{
-		float CurrnetSpringArmLength = SpringArmComponent->TargetArmLength;
-		float TargetSpringArmLength = NormalSpringArmLength + 350.f;
-		
-		CurrnetSpringArmLength = FMath::FInterpTo(
-			CurrnetSpringArmLength,
-			TargetSpringArmLength,
-			DeltaTime,
-			6.f
-		);
-		SpringArmComponent->TargetArmLength = CurrnetSpringArmLength;
-		if (FMath::IsNearlyEqual(CurrnetSpringArmLength, TargetSpringArmLength, 1.f))
-		{
-			bIsZoomOutLogic = false;
-			bIsZoomInLogic = true;
-			SpringArmComponent->TargetArmLength = TargetSpringArmLength;
-		}
-	}
-
-	else if (bIsZoomInLogic)
-	{
-		float CurrnetSpringArmLength = SpringArmComponent->TargetArmLength;
-		float TargetSpringArmLength = NormalSpringArmLength;
-
-		CurrnetSpringArmLength = FMath::FInterpTo(
-			CurrnetSpringArmLength,
-			TargetSpringArmLength,
-			DeltaTime,
-			6.f
-		);
-		SpringArmComponent->TargetArmLength = CurrnetSpringArmLength;
-
-		if (FMath::IsNearlyEqual(CurrnetSpringArmLength, TargetSpringArmLength, 1.f))
-		{
-			SpringArmComponent->TargetArmLength = NormalSpringArmLength;
-		}
-	}
 }
 
 void APlayerCharacter::MaxSpeedToNormalSpeed()
 {
 	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
-<<<<<<< HEAD
-	// TileManager.cpp > TileSpeed = MoveSpeed ï¿½ï¿½ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½
-	ATileManager* TileManager = Cast<ATileManager>(
-		UGameplayStatics::GetActorOfClass(GetWorld(), ATileManager::StaticClass()));
-	if (!TileManager) return;
-	TileManager->SetFloorMoveSpeed(MoveSpeed);
-=======
-	// TileManager.cpp > TileSpeed = MoveSpeed ï¿½ï¿½ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½
+	// TileManager.cpp > TileSpeed = MoveSpeed Á¤»óÈ­ ·ÎÁ÷
 	//
->>>>>>> EditCode
 	// ==========================================================
-	bIsZoomOutLogic = false;
-	bIsZoomInLogic = false;
 }
 
 void APlayerCharacter::OnDeath()
@@ -167,24 +95,9 @@ float APlayerCharacter::TakeDamage(
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-<<<<<<< HEAD
-	// CharacterMoveLogic =============================================================
 	AddMovementInput(GetActorForwardVector(), 1.0f);
 	//AccMoveSpeed = MoveSpeed * DeltaTime;
 	//AccSprintMoveSpeed = SprintMoveSpeed * DeltaTime;
-	// ================================================================================
-	
-	// SpringSoftMoveLogic ============================================================
-=======
-	//AddMovementInput(GetActorForwardVector(), 1.0f);
-	//AccMoveSpeed = MoveSpeed * DeltaTime;
-	//AccSprintMoveSpeed = SprintMoveSpeed * DeltaTime;
-
-	FVector CurrentLocation = GetActorLocation();
-	CurrentLocation.X = FixedX;
-	SetActorLocation(CurrentLocation);
-
->>>>>>> EditCode
 	CurrentPitch = FMath::FInterpTo(
 		CurrentPitch,
 		TargetPitch,
@@ -199,11 +112,6 @@ void APlayerCharacter::Tick(float DeltaTime)
 		8.f
 	);
 	SpringArmComponent->SetRelativeRotation(FRotator(CurrentPitch, CurrentYaw, 0.f));
-	// ================================================================================
-
-	// SpringArmSoftLogic :: WithSpeedItem ============================================
-	ZoomOutLogic(DeltaTime);
-	// ================================================================================
 
 }
 

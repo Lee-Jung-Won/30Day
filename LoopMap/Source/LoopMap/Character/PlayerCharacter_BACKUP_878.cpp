@@ -37,9 +37,11 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+<<<<<<< HEAD
 
+=======
 	FixedX = GetActorLocation().X;
-
+>>>>>>> EditCode
 }
 
 int32 APlayerCharacter::GetCurrentHP() const
@@ -60,15 +62,16 @@ int32 APlayerCharacter::GetCurrentSpeed() const
 void APlayerCharacter::SetCurrentSpeed(int32 InApplySpeed)
 {
 	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed + InApplySpeed;
-	// TileManager.cpp > TileSpeed = MoveSpeed + InApplySpeed ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+<<<<<<< HEAD
+	// TileManager.cpp > TileSpeed = MoveSpeed + InApplySpeed º¯°æ·ÎÁ÷
 	ATileManager* TileManager = Cast<ATileManager>(
 		UGameplayStatics::GetActorOfClass(GetWorld(), ATileManager::StaticClass()));
 	if (!TileManager) return;
 	TileManager->SetFloorMoveSpeed(MoveSpeed + InApplySpeed);
-
-
+=======
+	// TileManager.cpp > TileSpeed = MoveSpeed + InApplySpeed ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	//
-
+>>>>>>> EditCode
 	// ==========================================================
 
 	// =================================== camera zoom out
@@ -129,7 +132,7 @@ void APlayerCharacter::MaxSpeedToNormalSpeed()
 {
 	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 <<<<<<< HEAD
-	// TileManager.cpp > TileSpeed = MoveSpeed ï¿½ï¿½ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½
+	// TileManager.cpp > TileSpeed = MoveSpeed Á¤»óÈ­ ·ÎÁ÷
 	ATileManager* TileManager = Cast<ATileManager>(
 		UGameplayStatics::GetActorOfClass(GetWorld(), ATileManager::StaticClass()));
 	if (!TileManager) return;

@@ -25,13 +25,14 @@ ALPGameState::ALPGameState()
 
 void ALPGameState::AddStateScore(int32 Amount)
 {
-	// µ¿Àü¿¡¸¸ Á¡¼ö°¡ ÀÖ¾î¼­ ½ºÄÚ¾î ´õÇÏ´Â±è¿¡ °¹¼ö±îÁö
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾î¼­ ï¿½ï¿½ï¿½Ú¾ï¿½ ï¿½ï¿½ï¿½Ï´Â±è¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	StateScore += Amount;
 	PlayerCollectCoinCount++;
 }
 
 void ALPGameState::StartLevel()
 {
+
 	if (APlayerController* PC = GetWorld()->GetFirstPlayerController())
 	{
 		if (ALPPlayerController* LPPlayerController = Cast<ALPPlayerController>(PC))
@@ -39,7 +40,7 @@ void ALPGameState::StartLevel()
 			LPPlayerController->ShowGameHUD();
 		}
 	}
-	// instanceÀúÀåµÈ Á¤º¸ ºÒ·¯¿À±â
+	// instanceï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½
 	ULPGameInstance* GameInstance = Cast<ULPGameInstance>(GetGameInstance());
 	if (GameInstance)
 	{
@@ -60,7 +61,7 @@ void ALPGameState::StartLevel()
 		0.1f,
 		true
 	);
-	// ÇÊ¿äÇÏ¸é 3ÃÊÅ¸ÀÌ¸Ó ½á¼­ true
+	// ï¿½Ê¿ï¿½ï¿½Ï¸ï¿½ 3ï¿½ï¿½Å¸ï¿½Ì¸ï¿½ ï¿½á¼­ true
 	// tilemanager bIsGameStarted = true
 }
 
@@ -82,7 +83,7 @@ void ALPGameState::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// °ÔÀÓ½ÃÀÛ
+	// ï¿½ï¿½ï¿½Ó½ï¿½ï¿½ï¿½
 	StartLevel();
 }
 

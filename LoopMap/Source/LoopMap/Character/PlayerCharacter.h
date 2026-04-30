@@ -41,6 +41,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "State")
 	void SetCurrentSpeed(int32 InApplySpeed);
 
+	UPROPERTY()
+	float NormalSpringArmLength;
+	void ZoomOutLogic(float DeltaTime);
+	bool bIsZoomOutLogic;
+	bool bIsZoomInLogic;
+
 	FTimerHandle SpeedConstantTimer;
 	void MaxSpeedToNormalSpeed();
 
@@ -63,7 +69,6 @@ public:
 	float CurrentPitch;
 	UPROPERTY()
 	float CurrentYaw;
-
 
 protected:
 	virtual float TakeDamage(

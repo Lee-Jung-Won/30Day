@@ -39,7 +39,7 @@ void ALPPlayerController::BeginPlay()
 	}
 
 	//if (HUDWidgetClass)
-	//{	// ÀÎ½ºÅÏ½º·Î »ý¼ºÇØÁÖ´Â createwidget
+	//{	// ï¿½Î½ï¿½ï¿½Ï½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ createwidget
 	//	HUDWidgetInstance = CreateWidget<UUserWidget>(this, HUDWidgetClass);
 	//	if (HUDWidgetInstance)
 	//	{
@@ -59,8 +59,8 @@ void ALPPlayerController::BeginPlay()
 		ShowMainMenu(false);
 	}
 }
-// ShowMainMenu¿Í µ¿ÀÏ
-// ÀÎ½ºÅÏ½º ´ÙÁö¿ì°í Çãµå show
+// ShowMainMenuï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+// ï¿½Î½ï¿½ï¿½Ï½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ show
 void ALPPlayerController::ShowGameHUD()
 {
 	if (HUDWidgetInstance)
@@ -94,8 +94,8 @@ void ALPPlayerController::ShowGameHUD()
 
 void ALPPlayerController::ShowMainMenu(bool bIsRestart, int32 IsVictory)
 {
-	// bIsRestart¿¡ µû¶ó ¾î¶² ¹öÆ°±ÛÀÚ·Î ¹Ù²ÜÁö Á¤ÇÔ
-	// ÀÏ´Ü À§Á¬À» ´Ù ²¨
+	// bIsRestartï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½î¶² ï¿½ï¿½Æ°ï¿½ï¿½ï¿½Ú·ï¿½ ï¿½Ù²ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	// ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½
 	if (HUDWidgetInstance)
 	{
 		HUDWidgetInstance->RemoveFromParent();
@@ -117,8 +117,10 @@ void ALPPlayerController::ShowMainMenu(bool bIsRestart, int32 IsVictory)
 			SetInputMode(FInputModeUIOnly());
 		}
 
+
 		if (UTextBlock* ButtonText = Cast<UTextBlock>(MenuWidgetInstance->GetWidgetFromName(TEXT("StartButtonText"))))
-		{// Menu button text ¹Ù²Ù±â restart/start
+		{// Menu button text ï¿½Ù²Ù±ï¿½ restart/start
+
 			if (bIsRestart)
 			{
 				if (UImage* GetImageBox = Cast<UImage>(MenuWidgetInstance->GetWidgetFromName(TEXT("TitleImage"))))
@@ -184,7 +186,7 @@ void ALPPlayerController::ShowMainMenu(bool bIsRestart, int32 IsVictory)
 }
 
 void ALPPlayerController::CStartGame()
-{ // ³¡³­ÈÄ »õ·Î¿î ½ÃÀÛ = GameInstance°¡ ¾ÆÁ÷»ì¾ÆÀÖ±â¶§¹®¿¡ °ªÀÌ ÀÖÀ½
+{ // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½ = GameInstanceï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±â¶§ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	if (ULPGameInstance* LPGameInstance = Cast<ULPGameInstance>(
 		UGameplayStatics::GetGameInstance(this)))
 	{
@@ -211,7 +213,7 @@ UUserWidget* ALPPlayerController::GetHUDWidget() const
 //{
 //	if (IsMenuLevel)
 //	{
-//		// »óÅÂÃ¢ UI?
+//		// ï¿½ï¿½ï¿½ï¿½Ã¢ UI?
 //
 //	}
 //	else

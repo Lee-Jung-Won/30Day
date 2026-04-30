@@ -59,8 +59,8 @@ void ABoomTrapItem::Explode()
 			ActivateItem(Actor);
 		}
 	}
-	// ¹üÀ§¾È¿¡ °è¼Ó°ãÃÄÀÖÀ»¶§ activateItem¿¡¼­ detroy1¹ø
-	// ¿©±â¼­ detroy2¹ø
+	// ï¿½ï¿½ï¿½ï¿½ï¿½È¿ï¿½ ï¿½ï¿½Ó°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ activateItemï¿½ï¿½ï¿½ï¿½ detroy1ï¿½ï¿½
+	// ï¿½ï¿½ï¿½â¼­ detroy2ï¿½ï¿½
 	DestroyItem();
 
 }

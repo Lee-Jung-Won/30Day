@@ -6,6 +6,7 @@
 
 class UInputAction;
 class UInputMappingContext;
+class UUserWidget;
 
 UCLASS()
 class LOOPMAP_API ALPPlayerController : public APlayerController
@@ -25,6 +26,36 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inputs")
 	TObjectPtr<UInputAction> Sprint_Action;
 
+	// UserWidget =================================================
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HUD")
+	TSubclassOf<UUserWidget> HUDWidgetClass;
+	UPROPERTY()
+	TObjectPtr<UUserWidget> HUDWidgetInstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HUD")
+	TSubclassOf<UUserWidget> MenuWidgetClass;
+	UPROPERTY()
+	TObjectPtr<UUserWidget> MenuWidgetInstance;
+
+	UFUNCTION(BlueprintCallable, Category = "HUD")
+	void ShowGameHUD();
+	UFUNCTION(BlueprintCallable, Category = "HUD")
+	void ShowMainMenu(bool bIsRestart);
+	UFUNCTION(BlueprintCallable, Category = "HUD")
+	void CStartGame();
+
+	UFUNCTION(BlueprintPure, Category = "HUD")
+	UUserWidget* GetHUDWidget() const;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "HUD")
+	//TSubclassOf<UUserWidget> MenuWidgetClass;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "HUD")
+	//TObjectPtr<UUserWidget> MenuWidgetInstance;
+
+	//void ShowMainMenu(bool IsMenuLevel);
+
+	//UFUNCTION(BlueprintCallable, Category = "HUD")
+	//void GotoGameStage();
 protected:
 	virtual void BeginPlay() override;
 };

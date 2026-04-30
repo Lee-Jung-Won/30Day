@@ -5,13 +5,18 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "Controller/LPPlayerController.h"
+#include "Game/LPGameState.h"
 #include "EnhancedInputComponent.h"
+
+#include "TileManager.h"
+#include "Kismet/GameplayStatics.h"
+
 APlayerCharacter::APlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
-
+	NormalSpringArmLength = 350.0f;
 	SpringArmComponent = GameUtil::CreateComponent<USpringArmComponent>(this);
-	SpringArmComponent->TargetArmLength = 300.f;
+	SpringArmComponent->TargetArmLength = NormalSpringArmLength;
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComponent"));
 	CameraComponent->SetupAttachment(SpringArmComponent, USpringArmComponent::SocketName);
@@ -25,12 +30,14 @@ APlayerCharacter::APlayerCharacter()
 	MaxHP = 100;
 	CurrentHP = MaxHP;
 
+	bIsZoomOutLogic = false;
+	bIsZoomInLogic = false;
 }
 
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 int32 APlayerCharacter::GetCurrentHP() const
@@ -52,23 +59,77 @@ void APlayerCharacter::SetCurrentSpeed(int32 InApplySpeed)
 {
 	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed + InApplySpeed;
 	// TileManager.cpp > TileSpeed = MoveSpeed + InApplySpeed 변경로직
-	//
+	ATileManager* TileManager = Cast<ATileManager>(
+		UGameplayStatics::GetActorOfClass(GetWorld(), ATileManager::StaticClass()));
+	if (!TileManager) return;
+	TileManager->SetFloorMoveSpeed(MoveSpeed + InApplySpeed);
 	// ==========================================================
+
+	// =================================== camera zoom out
+	bIsZoomOutLogic = true;
+	// ===================================
 	GetWorldTimerManager().SetTimer(
 		SpeedConstantTimer,
 		this,
 		&APlayerCharacter::MaxSpeedToNormalSpeed,
-		3.f,
+		1.5f,
 		false
 	);
+}
+
+void APlayerCharacter::ZoomOutLogic(float DeltaTime)
+{// ZoomOutLogic in Tick()
+	if (bIsZoomOutLogic)
+	{
+		float CurrnetSpringArmLength = SpringArmComponent->TargetArmLength;
+		float TargetSpringArmLength = NormalSpringArmLength + 350.f;
+		
+		CurrnetSpringArmLength = FMath::FInterpTo(
+			CurrnetSpringArmLength,
+			TargetSpringArmLength,
+			DeltaTime,
+			6.f
+		);
+		SpringArmComponent->TargetArmLength = CurrnetSpringArmLength;
+		if (FMath::IsNearlyEqual(CurrnetSpringArmLength, TargetSpringArmLength, 1.f))
+		{
+			bIsZoomOutLogic = false;
+			bIsZoomInLogic = true;
+			SpringArmComponent->TargetArmLength = TargetSpringArmLength;
+		}
+	}
+
+	else if (bIsZoomInLogic)
+	{
+		float CurrnetSpringArmLength = SpringArmComponent->TargetArmLength;
+		float TargetSpringArmLength = NormalSpringArmLength;
+
+		CurrnetSpringArmLength = FMath::FInterpTo(
+			CurrnetSpringArmLength,
+			TargetSpringArmLength,
+			DeltaTime,
+			6.f
+		);
+		SpringArmComponent->TargetArmLength = CurrnetSpringArmLength;
+
+		if (FMath::IsNearlyEqual(CurrnetSpringArmLength, TargetSpringArmLength, 1.f))
+		{
+			SpringArmComponent->TargetArmLength = NormalSpringArmLength;
+		}
+	}
 }
 
 void APlayerCharacter::MaxSpeedToNormalSpeed()
 {
 	GetCharacterMovement()->MaxWalkSpeed = MoveSpeed;
 	// TileManager.cpp > TileSpeed = MoveSpeed 정상화 로직
-	//
+	ATileManager* TileManager = Cast<ATileManager>(
+		UGameplayStatics::GetActorOfClass(GetWorld(), ATileManager::StaticClass()));
+	if (!TileManager) return;
+	TileManager->SetFloorMoveSpeed(MoveSpeed);
 	// ==========================================================
+	bIsZoomOutLogic = false;
+	bIsZoomInLogic = false;
 }
 
 void APlayerCharacter::OnDeath()
@@ -95,9 +156,13 @@ float APlayerCharacter::TakeDamage(
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	// CharacterMoveLogic =============================================================
 	AddMovementInput(GetActorForwardVector(), 1.0f);
 	//AccMoveSpeed = MoveSpeed * DeltaTime;
 	//AccSprintMoveSpeed = SprintMoveSpeed * DeltaTime;
+	// ================================================================================
+	
+	// SpringSoftMoveLogic ============================================================
 	CurrentPitch = FMath::FInterpTo(
 		CurrentPitch,
 		TargetPitch,
@@ -112,6 +177,11 @@ void APlayerCharacter::Tick(float DeltaTime)
 		8.f
 	);
 	SpringArmComponent->SetRelativeRotation(FRotator(CurrentPitch, CurrentYaw, 0.f));
+	// ================================================================================
+
+	// SpringArmSoftLogic :: WithSpeedItem ============================================
+	ZoomOutLogic(DeltaTime);
+	// ================================================================================
 
 }
 

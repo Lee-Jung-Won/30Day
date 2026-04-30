@@ -65,14 +65,19 @@ void ATileManager::Tick(float DeltaTime)
 
 	MoveTiles(DeltaTime);
 
-	NextSpawnX -= MoveSpeed * DeltaTime;//타일이 -x로 움직이기때문에 다음 생성 위치도 같이 움직여야함
 
-	if (NextSpawnX <= SpawnX)
+	while (NextSpawnX <= SpawnX)
 	{
 		SpawnTile();
 	}
 	RemoveOldTiles();
 
+	NextSpawnX -= MoveSpeed * DeltaTime;//타일이 -x로 움직이기때문에 다음 생성 위치도 같이 움직여야함
+}
+
+void ATileManager::SetFloorMoveSpeed(float InSpeed)
+{
+	MoveSpeed = InSpeed;
 }
 
 void ATileManager::CountdownTick()
@@ -143,8 +148,8 @@ void ATileManager::SpawnTile()
 	// SpawnVolumeTile Spawn ===========================
 	ALPSpawnVolume* SpawnTile = GetWorld()->SpawnActor<ALPSpawnVolume>(
 		LPSpawnVolumeClass,
-		SpawnLocation + FVector(0.f,0.f,500.f), // 다리메쉬 높이가 커서 위치보정
-		SpawnRotation + FRotator(0.f,90.f,0.f),
+		SpawnLocation + FVector(0.f,0.f,500.f), // 다리메쉬 높이이슈 위치보정
+		SpawnRotation + FRotator(0.f,90.f,0.f), // 다리메쉬 회전값 적용
 		SpawnParams
 	);
 	// Spawn Item In SpawnVolumeTile ====================

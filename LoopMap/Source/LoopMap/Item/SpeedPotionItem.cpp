@@ -2,7 +2,7 @@
 #include "Character/PlayerCharacter.h"
 ASpeedPotionItem::ASpeedPotionItem()
 {
-	AddAmount = 200;
+	AddAmount = 400;
 	ItemName = TEXT("SpeedPotionItem");
 }
 

@@ -5,7 +5,7 @@
 
 ASpikeTrapItem::ASpikeTrapItem()
 {
-	DmgAmount = 20;
+	DmgAmount = 25;
 	ItemName = TEXT("SpikeTrapItem");
 }
 

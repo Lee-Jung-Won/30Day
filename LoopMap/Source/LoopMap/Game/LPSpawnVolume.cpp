@@ -65,7 +65,7 @@ TArray<AActor*> ALPSpawnVolume::SpawnItem()
 	//격자좌표갯수만큼 랜덤아이템 얻기
 	TArray<UClass*> SpawnItemInfo = GetRandomItem(SpawnSpots.Num());
 	//스폰된아이템넣기
-	
+	//TArray<AActor*> SpawnedItemInfo;
 	if (SpawnItemInfo.IsEmpty())
 	{
 		UE_LOG(LogTemp, Warning, TEXT("List is Empty"));

@@ -21,7 +21,7 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-
+	void SetFloorMoveSpeed(float InSpeed);
 
 	//아래는 나중에 아이템 먹었을때 이속 변경에 쓸 함수
 	/*UFUNCTION(BluprintCallable, Category = "Tile")
